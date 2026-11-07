@@ -11,7 +11,7 @@ import urllib.request
 import urllib.error
 import zipfile
 
-REPO = 'skylerahuman/abolish_abortion_georgia'
+REPO = 'skylerahuman/endabortionga'
 BASE = Path('/var/lib/eag-releases')
 TOKEN = (Path(os.environ['CREDENTIALS_DIRECTORY']) / 'github-token').read_text().strip()
 

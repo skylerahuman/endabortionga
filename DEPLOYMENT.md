@@ -1,6 +1,10 @@
 # Local development and deployment
 
-Repository: `skylerahuman/abolish_abortion_georgia` (underscores).
+Repository: `skylerahuman/endabortionga`.
+Local working copy: `/home/sky/endabortionga`.
+
+The initial SvelteKit preview source and prepared pipeline were imported from the
+previous working copy; deployment now uses only this repository.
 
 ```sh
 npm ci
@@ -16,14 +20,11 @@ returns 503 and does not store submissions. No production database is configured
 
 - `dev`: the full existing SvelteKit application at https://dev.endabortionga.org.
 - `prd`: production, initially only `deploy/holding/` at https://endabortionga.org.
-- `main`: preserved historical branch; currently still the GitHub default branch.
+- `prd` is the default branch. There is no separate main branch.
 
-**Bootstrap blocker:** the PAT lacks Administration: write. GitHub returned 403
-for protections, rulesets and changing the default branch. Neither branch is
-protected yet. Automatic production promotion is therefore disabled on the VM;
-production serves a locally seeded copy of the reviewed holding page.
-
-Grant the PAT repository Administration: write, then run:
+Production is protected by a required PR, required `build` check and owner-only
+update policy. Bootstrap branches were initialized before applying protections.
+To reapply the GitHub configuration (Administration: write required), run:
 
 ```sh
 node deploy/configure-github.mjs
@@ -39,7 +40,7 @@ on updating prd. Do not grant other people administrator access. Force pushes an
 branch deletion are blocked. No automation merges production PRs. Initial branch
 bootstrap precedes protection.
 
-After protections are configured, push work to dev or open a feature PR into dev.
+Push work to dev or open a feature PR into dev.
 Promote by opening a PR **from dev into prd**.
 
 ## Build and deployment

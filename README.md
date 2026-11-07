@@ -44,7 +44,7 @@ Action center for:
 ## Deployment and local development
 
 See [DEPLOYMENT.md](DEPLOYMENT.md) for the dev/prd pipeline, VM operations,
-DNS/TLS setup and the pending GitHub Administration-permission requirement.
+DNS/TLS setup and the GitHub production branch protections.
 
 ## Developing
 

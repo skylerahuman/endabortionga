@@ -2,7 +2,7 @@
 // Uses the token for authentication only; never prints it.
 import { readFile } from 'node:fs/promises';
 
-const repository = 'skylerahuman/abolish_abortion_georgia';
+const repository = 'skylerahuman/endabortionga';
 const token = (await readFile('/home/sky/.gh-pat', 'utf8')).trim();
 async function api(path, method = 'GET', body) {
 	const response = await fetch(`https://api.github.com/repos/${repository}${path}`, {
