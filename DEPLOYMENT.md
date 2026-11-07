@@ -12,7 +12,10 @@ npm run dev -- --host 127.0.0.1
 npm run build
 ```
 
-Node 22 is used locally and in CI. No secrets are needed to build. Movement accounts,
+Node 22 is used locally and in CI. Native SQLite compilation requires Python 3,
+make and a C++ compiler (Ubuntu ARM64 runners provide these). On NixOS use a
+Nix shell with python3, gnumake and gcc for npm install/build commands.
+No secrets are needed to build. Movement accounts,
 district registrations/history and communication preferences use SQLite at local
 `.data/movement-map.sqlite`; production requires an explicit private persistent
 `DATABASE_PATH`. This is separate from the legacy volunteers API's optional Neon
@@ -26,7 +29,7 @@ host configuration. Never put account storage inside a versioned release directo
 ## Branches
 
 - `dev`: the full existing SvelteKit application at https://dev.endabortionga.org.
-- `prd`: production, initially only `deploy/holding/` at https://endabortionga.org.
+- `prd`: the production application at https://endabortionga.org after the launch PR merges.
 - `prd` is the default branch. There is no separate main branch.
 
 Production is protected by a required PR, required `build` check and owner-only
@@ -60,10 +63,19 @@ typecheck/navigation failures are fixed. Third-party dependency audit findings s
 need a separate review. Native dependency scripts run on the GitHub runner while
 packaging better-sqlite3; never skip those scripts in the release dependency install.
 
-Push builds upload `site-dev` / `site-prd` artifacts. Production artifacts contain
-only the holding page, never the full application. Changing production to the
-full site requires an explicit change to the package step, host routing and
-reviewed production service configuration, promoted through a dev-to-prd PR.
+Push builds upload `site-dev` / `site-prd` application artifacts. Builds run on
+Ubuntu ARM64 to match the VM, including native SQLite and password-hashing modules.
+Production runs separately as eag-production, with its own private SQLite database
+at `/var/lib/eag-production/movement.sqlite` and port 3101. Dev uses port 3100 and
+`/var/lib/eag-preview/movement.sqlite`; databases are never copied between them.
+Caddy serves the old holding artifact until the first application release is
+selected. Thereafter it proxies the production application. Both branches are
+health-checked through `/api/regions`, exercising SQLite, with automatic artifact
+rollback on failure. Code rollback does not roll back database migrations; back up
+the private databases before future schema-changing deployments.
+
+The owner must merge the dev-to-prd launch PR before production deploys. Merging
+and GitHub checks are never bypassed by the deployer.
 
 The VM polls once per minute, selects a successful run of `tests.yml` from this
 repository and the exact current branch HEAD, checks the artifact SHA-256 digest,

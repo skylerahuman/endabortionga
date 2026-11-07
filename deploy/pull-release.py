@@ -98,7 +98,8 @@ def deploy(branch):
             os.chmod(root, 0o755)
             for file in files:
                 os.chmod(Path(root) / file, 0o644)
-        expected = staging / ('build/index.js' if branch == 'dev' else 'index.html')
+        is_app = (staging / 'build/index.js').is_file()
+        expected = staging / ('build/index.js' if is_app or branch == 'dev' else 'index.html')
         if not expected.is_file():
             raise RuntimeError('Incomplete release')
         # Recheck HEAD after download so a superseded build cannot be promoted.
@@ -109,24 +110,26 @@ def deploy(branch):
         staging.rename(release)
         previous = current.resolve() if current.is_symlink() else None
         select(current, release)
-        if branch == 'dev':
+        if is_app:
+            service = 'eag-preview.service' if branch == 'dev' else 'eag-production.service'
+            port = 3100 if branch == 'dev' else 3101
             try:
-                subprocess.run(['systemctl', 'restart', 'eag-preview.service'], check=True)
+                subprocess.run(['systemctl', 'restart', service], check=True)
                 import time
                 for attempt in range(30):
                     try:
-                        response = urllib.request.urlopen('http://127.0.0.1:3100/', timeout=2)
+                        response = urllib.request.urlopen(f'http://127.0.0.1:{port}/api/regions', timeout=2)
                         if response.status == 200:
                             break
                     except (OSError, urllib.error.URLError):
                         pass
                     time.sleep(1)
                 else:
-                    raise RuntimeError('Preview health check failed')
+                    raise RuntimeError(branch + ' application/database health check failed')
             except Exception:
                 if previous:
                     select(current, previous)
-                    subprocess.run(['systemctl', 'restart', 'eag-preview.service'], check=True)
+                    subprocess.run(['systemctl', 'restart', service], check=True)
                 else:
                     current.unlink(missing_ok=True)
                 raise
