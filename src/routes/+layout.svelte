@@ -1,38 +1,41 @@
 <script lang="ts">
 	import '../app.css';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
-	import logo from '$lib/assets/logo_basic.png';
+
 	import Header from '$lib/components/layout/Header.svelte';
 	import Footer from '$lib/components/layout/Footer.svelte';
 	import OverlayMenu from '$lib/components/layout/OverlayMenu.svelte';
 	import SupportModal from '$lib/components/support/SupportModal.svelte';
-	import { mobileMenuOpen } from '$lib/stores';
 
 	let { children } = $props();
+	let mobileMenuOpen = $state(false);
 
 	function closeMenu() {
-		mobileMenuOpen.set(false);
+		mobileMenuOpen = false;
 	}
 
 	onMount(() => {
 		const handleClickOutside = (event: MouseEvent) => {
 			const target = event.target as HTMLElement;
-			let isOpen = false;
-			mobileMenuOpen.subscribe((v) => (isOpen = v))();
-			if (isOpen && !target.closest('.nav-container') && !target.closest('.overlay-menu')) {
-				mobileMenuOpen.set(false);
+			if (
+				mobileMenuOpen &&
+				!target.closest('.nav-container') &&
+				!target.closest('.overlay-menu')
+			) {
+				mobileMenuOpen = false;
 			}
 		};
-		document.addEventListener('mousedown', handleClickOutside);
-		return () => document.removeEventListener('mousedown', handleClickOutside);
+		document.addEventListener('pointerup', handleClickOutside);
+		return () => document.removeEventListener('pointerup', handleClickOutside);
 	});
+
 </script>
 
 <svelte:head>
-	<title>Operation Gospel</title>
-	<link rel="icon" href={logo} />
+	<title>End Abortion Georgia</title>
+	<link rel="icon" href="{base}/movement-seed.svg" />
 </svelte:head>
 
 <div class="min-h-screen flex flex-col bg-black text-white">
@@ -45,10 +48,10 @@
 	</a>
 
 	<!-- Header with Menu Toggle -->
-	<Header />
+	<Header menuOpen={mobileMenuOpen} onMenuToggle={() => (mobileMenuOpen = !mobileMenuOpen)} />
 
 	<!-- Full-Screen Overlay Menu -->
-	<OverlayMenu onClose={closeMenu} />
+	<OverlayMenu open={mobileMenuOpen} onClose={closeMenu} />
 
 	<!-- Support Modal -->
 	<SupportModal />
@@ -59,5 +62,7 @@
 	</main>
 
 	<!-- Footer -->
-	<Footer />
+	{#if page.url.pathname !== '/' && page.url.pathname !== '/georgia-map'}
+		<Footer />
+	{/if}
 </div>

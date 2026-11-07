@@ -1,17 +1,25 @@
 import { render, screen } from '@testing-library/svelte';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import Page from './+page.svelte';
+vi.stubGlobal(
+	'fetch',
+	vi.fn(async () => new Response('{}', { status: 503 }))
+);
 
-describe('Home Page', () => {
-	it('renders the hero heading', () => {
+describe('map-only homepage', () => {
+	it('uses a screen-reader heading instead of a promotional hero', () => {
 		render(Page);
-		expect(screen.getByText(/Georgia bears/i)).toBeInTheDocument();
-		expect(screen.getByText(/bloodguilt/i)).toBeInTheDocument();
+		expect(screen.getByRole('heading', { name: 'Georgia regions' })).toBeInTheDocument();
+		expect(screen.getByRole('heading', { name: 'Participation' })).toBeInTheDocument();
+		expect(screen.queryByText(/See where the church/)).not.toBeInTheDocument();
+		expect(screen.queryByText(/Six regions\. One movement/)).not.toBeInTheDocument();
 	});
-
-	it('renders CTA buttons', () => {
+	it('does not embed registration, giving, or technical debug text', () => {
 		render(Page);
-		expect(screen.getByRole('link', { name: /Join Us/i })).toBeInTheDocument();
-		expect(screen.getByRole('link', { name: /Support/i })).toBeInTheDocument();
+		expect(screen.queryByRole('button', { name: 'Create account' })).not.toBeInTheDocument();
+		expect(screen.queryByText(/Fund the next local action/)).not.toBeInTheDocument();
+		expect(screen.queryByText(/RMI combines/)).not.toBeInTheDocument();
+		expect(screen.queryByTestId('map-debug')).not.toBeInTheDocument();
+		expect(screen.queryByTestId('preview-label')).not.toBeInTheDocument();
 	});
 });

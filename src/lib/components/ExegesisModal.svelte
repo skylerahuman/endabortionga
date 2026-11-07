@@ -34,7 +34,13 @@
 {#if showModal}
 	<div
 		class="fixed inset-0 bg-navy-deep/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
-		onclick={() => (showModal = false)}
+		onclick={(event) => {
+			if (event.target === event.currentTarget) showModal = false;
+		}}
+		onkeydown={(event) => {
+			if (event.key === "Escape") showModal = false;
+		}}
+		role="presentation"
 		transition:fly={{ duration: 300, y: 20, opacity: 0, easing: quintOut }}
 	>
 		<div

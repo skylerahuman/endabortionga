@@ -5,6 +5,7 @@ const B = base || '';
 export const Routes = {
 	HOME: `${B}/`,
 	GEORGIA_BATTLE: `${B}/georgia-battle`,
+	GEORGIA_MAP: `${B}/georgia-map`,
 	TIMELINE: `${B}/timeline`,
 	FAQS: `${B}/faqs`,
 	JOIN: `${B}/join`,
@@ -24,13 +25,12 @@ export const Routes = {
 } as const;
 
 export const ExternalLinks = {
-	DONORBOX: 'https://donorbox.org/regular-donations-15',
+	DONATE: `${B}/support`,
 	PLURAL_POLICY: 'https://pluralpolicy.com/find-your-legislator/',
 	LEGIS_GA: 'https://www.legis.ga.gov/legislation/64602',
 	EMORY_DUNAHOO: 'https://www.emorydunahoo.com/',
 	YOUTUBE: 'https://www.youtube.com/watch?v=k33epqzJIlM',
-	EMAIL_JOIN: 'mailto:join@operationgospel.life',
-	EMAIL_INFO: 'mailto:info@operationgospel.com'
+	ACCOUNT: `${B}/join`
 } as const;
 
 export const PagesWithHiddenNav: string[] = [
@@ -50,19 +50,28 @@ export const NavCategories: NavCategory[] = [
 		links: [
 			{ label: 'Abolition Basics', href: Routes.ABOLITION_BASICS },
 			{ label: 'Georgia Battle', href: Routes.GEORGIA_BATTLE },
+			{ label: 'Georgia map', href: Routes.GEORGIA_MAP },
 			{ label: 'Hold Burns Accountable', href: Routes.BURNS_ACCOUNTABILITY },
-			{ label: 'FAQs', href: Routes.FAQS },
-			{ label: 'About Operation Gospel', href: Routes.ABOUT }
+			{ label: 'FAQs', href: Routes.FAQS }
 		]
 	},
 	{
 		name: 'Take Action',
 		links: [
-			{ label: 'Join Us', href: Routes.JOIN },
+			{ label: 'Join the Fight', href: Routes.JOIN },
 			{ label: 'For Pastors', href: Routes.FOR_PASTORS },
-			{ label: 'Call Your Rep', href: Routes.REP_CALLS },
-			{ label: 'Support - Prayer', href: '#support-prayer' },
-			{ label: 'Support - Donate', href: '#support-donate' }
+			{ label: 'Call Your Representative', href: Routes.REP_CALLS },
+			{ label: 'Near Me', href: `${B}/near-me` },
+			{ label: 'Support Us', href: Routes.SUPPORT }
+		]
+	},
+	{
+		name: 'About',
+		links: [
+			{ label: 'About Us', href: Routes.ABOUT },
+			{ label: 'Get Involved', href: Routes.GET_INVOLVED },
+			{ label: 'Timeline', href: Routes.TIMELINE },
+			{ label: 'HB 441 Analysis', href: Routes.BILL_ANALYSIS }
 		]
 	}
 ];

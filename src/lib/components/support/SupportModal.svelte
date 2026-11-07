@@ -74,7 +74,7 @@
 						</li>
 					</ul>
 					<a
-						href="mailto:pray@operationgospel.life"
+						href="/join"
 						class="inline-block w-full bg-transparent border border-gold text-gold hover:bg-gold/10 font-black uppercase tracking-widest py-3 text-xs rounded-sm transition-all duration-300 text-center"
 					>
 						Join Prayer Team
@@ -103,7 +103,7 @@
 						</li>
 					</ul>
 					<a
-						href="https://donorbox.org/regular-donations-15"
+						href="/support"
 						target="_blank"
 						rel="noopener noreferrer"
 						class="inline-block w-full bg-gold hover:bg-yellow-600 text-charcoal font-black uppercase tracking-widest py-3 text-xs rounded-sm transition-all duration-300 shadow-lg text-center"
@@ -111,7 +111,7 @@
 						Donate Now
 					</a>
 					<p class="text-neutral-600 text-xs text-center">
-						For tax-deductible giving, donate through our fiscal sponsor.
+						Payment availability and organization disclosures are shown at checkout. No tax-deductibility claim is made.
 					</p>
 				{/if}
 			</main>

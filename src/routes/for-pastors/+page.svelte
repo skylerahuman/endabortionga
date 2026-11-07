@@ -13,12 +13,13 @@
 		<!-- Hero Section -->
 		<div class="text-center">
 			<h1 class="text-2xl sm:text-3xl lg:text-4xl font-display font-bold tracking-tight text-parchment uppercase">
-				For Pastors and Churches
+				For Pastors and Church Leaders
 			</h1>
 		</div>
 
 		<!-- Documentary Embed -->
 		<div class="relative w-full aspect-video rounded-sm overflow-hidden shadow-2xl border border-charcoal">
+			<h2 class="sr-only">Essential Viewing: The Fatal Flaw</h2>
 			<iframe
 				title="The Fatal Flaw Documentary"
 				src="https://www.youtube-nocookie.com/embed/k33epqzJIlM"
@@ -34,7 +35,7 @@
 			<h2 class="text-lg sm:text-xl font-display font-bold mb-4 text-burgundy">The Turned Over Hypothesis</h2>
 			<div class="space-y-4 text-parchment/80 text-sm sm:text-base leading-relaxed mb-8">
 				<p>
-					Romans 1 gives the diagnosis: when a people refuse to honor God and give Him thanks, He gives them over to a debased mind. This is not a political problem. It is a judgment.
+					Romans 1 gives us the diagnosis: when a people refuse to honor God and give Him thanks, He gives them over to a debased mind. This is not a political problem. It is a judgment.
 				</p>
 				<p>
 					Abortion is the visible fruit. The slaughter of the pre-born is what happens when a society rejects the Lordship of Christ. We see it in Georgia. We see it everywhere.

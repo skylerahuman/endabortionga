@@ -298,10 +298,10 @@
 									<div
 										bind:this={resultContainer}
 										tabindex="-1"
-										class="text-center bg-green-900/10 border border-green-500/20 rounded-md p-4 focus:outline-none focus:ring-2 focus:ring-crimson/50"
+										class="text-center bg-charcoal/50 border border-green-500/20 rounded-md p-4 focus:outline-none focus:ring-2 focus:ring-crimson/50"
 									>
 										<p class="text-xs text-bone/60 uppercase tracking-widest mb-1">
-											Found District
+											Your Georgia House District is:
 										</p>
 										<p class="text-4xl font-mono font-bold text-green-400 tracking-widest mb-2">
 											{registrationState.form.district || 'N/A'}

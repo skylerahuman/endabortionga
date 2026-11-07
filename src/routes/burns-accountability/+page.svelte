@@ -8,6 +8,18 @@
 </svelte:head>
 
 <main class="flex flex-col w-full bg-void text-parchment min-h-screen font-body">
+	<aside class="hidden md:block w-64 shrink-0 border-r border-charcoal p-6">
+		<h2 class="text-xs font-semibold uppercase tracking-widest text-neutral-500 mb-4 pb-2 border-b border-neutral-800">
+			Action Center
+		</h2>
+		<nav class="space-y-1">
+			<a href={Routes.BURNS_ACCOUNTABILITY} class="block px-4 py-3 text-sm text-neutral-400 hover:text-paper hover:bg-neutral-800/50">Burns Accountability</a>
+			<a href={Routes.BILL_ANALYSIS} class="block px-4 py-3 text-sm text-neutral-400 hover:text-paper hover:bg-neutral-800/50">View Bill Analysis</a>
+			<a href={Routes.REP_CALLS} class="block px-4 py-3 text-sm text-neutral-400 hover:text-paper hover:bg-neutral-800/50">Call Your Representative</a>
+			<a href={Routes.JOIN} class="block px-4 py-3 text-sm text-neutral-400 hover:text-paper hover:bg-neutral-800/50">Join the Movement</a>
+		</nav>
+	</aside>
+
 	<!-- Page Header -->
 	<section class="relative py-24 px-6 border-b border-charcoal bg-void">
 		<div class="max-w-4xl mx-auto text-center">

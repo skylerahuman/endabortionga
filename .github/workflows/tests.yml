@@ -13,7 +13,7 @@ concurrency:
 jobs:
   build:
     name: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -27,33 +27,33 @@ jobs:
           HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
         run: test "$HEAD_BRANCH" = dev && test "$HEAD_REPO" = "$GITHUB_REPOSITORY"
       - run: npm ci
-      - name: Existing unit suite (known baseline failures; see DEPLOYMENT.md)
-        continue-on-error: true
+      - run: npm run check
+      - name: Unit tests
         run: npm run test:unit -- --run
+      - name: Validate contiguous region coverage
+        run: npm run data:validate-regions
       - run: npm run build
       - name: Smoke test built preview
         run: |
-          HOST=127.0.0.1 PORT=3000 ORIGIN=http://127.0.0.1:3000 node build &
+          DATABASE_PATH="$RUNNER_TEMP/smoke.sqlite" PUBLIC_SITE_ENV=prd HOST=127.0.0.1 PORT=3000 ORIGIN=http://127.0.0.1:3000 node build &
           trap 'kill $!' EXIT
           for attempt in $(seq 1 30); do
             if curl --fail --silent http://127.0.0.1:3000/ > /tmp/home.html; then break; fi
             sleep 1
           done
           grep -q '<html' /tmp/home.html
+          curl --fail --silent http://127.0.0.1:3000/api/regions > /tmp/regions.json
+          node -e "const r=require('/tmp/regions.json');if(r.regions.length!==6)process.exit(1)"
           test "$(curl -s -o /tmp/response -w '%{http_code}' -X POST http://127.0.0.1:3000/api/volunteers -H 'Content-Type: application/json' -d '{}')" = 503
           grep -q 'not available yet' /tmp/response
       - name: Package release
         run: |
           mkdir -p release
-          if [ "${{ github.ref }}" = refs/heads/prd ]; then
-            cp -r deploy/holding/. release/
-          else
-            cp -r build package.json package-lock.json release/
-            cd release
-            npm ci --omit=dev --ignore-scripts
-            rm -rf node_modules/.bin
-            cd ..
-          fi
+          cp -r build package.json package-lock.json release/
+          cd release
+          npm ci --omit=dev
+          rm -rf node_modules/.bin
+          cd ..
           tar -czf site.tar.gz -C release .
       - uses: actions/upload-artifact@v4
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
