@@ -207,7 +207,7 @@
 
 					<div class="mt-[5vh] flex flex-col items-center gap-4">
 						<a
-							href="https://donorbox.org/regular-donations-15"
+							href="/support"
 							target="_blank"
 							class="px-[5vh] py-[1.8vh] bg-[#660000] border-[0.4vh] border-[#07090E] text-white text-[2.1vh] uppercase transition-all shadow-[0_2vh_5vh_rgba(0,0,0,0.8)] font-bebas rounded-lg hover:scale-102"
 						>
@@ -356,7 +356,7 @@
 
 				<div class="mt-10 flex flex-col items-center gap-6 w-full mx-auto">
 					<a
-						href="https://donorbox.org/regular-donations-15"
+						href="/support"
 						target="_blank"
 						class="px-12 py-5 bg-[#660000] border-[8px] border-[#07090E] text-white text-center font-bold uppercase tracking-[0.2em] shadow-[0_20px_50px_rgba(0,0,0,0.8)] font-bebas rounded-full transition-all active:scale-95"
 						>Give to Operation Gospel</a

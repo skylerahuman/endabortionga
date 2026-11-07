@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { PagesWithHiddenNav } from '$lib/config/navigation';
+	import { env } from '$env/dynamic/public';
+	import { displayFlags } from '$lib/config/display';
+	const flags = $derived(displayFlags(env));
+	import { NavCategories, PagesWithHiddenNav } from '$lib/config/navigation';
 
 	const isHidden = $derived(PagesWithHiddenNav.includes(page.url.pathname));
 </script>
@@ -17,14 +20,28 @@
 				</div>
 			</div>
 
+			<div class="grid md:grid-cols-3 gap-10 mb-12">
+				{#each NavCategories as category}
+					<div>
+						<h3 class="font-ui text-xs font-semibold uppercase tracking-[0.15em] text-gold mb-4 pb-2 border-b border-charcoal">
+							{category.name}
+						</h3>
+						<ul class="space-y-2">
+							{#each category.links as link}
+								<li><a href={link.href} class="text-sm text-parchment-muted hover:text-gold">{link.label}</a></li>
+							{/each}
+						</ul>
+					</div>
+				{/each}
+			</div>
+
 			<!-- Footer Info -->
 			<div class="text-center">
-				<p class="text-center text-sm text-parchment-muted mb-6">
-					Questions? Contact us at <a href="mailto:support@operationgospel.life" class="text-gold hover:text-gold-light transition-colors">support@operationgospel.life</a>
-				</p>
+				{#if flags.previewLabels}
+					<p class="text-center text-sm text-parchment-muted mb-6">Development preview · organization disclosures pending.</p>
+				{/if}
 				<div class="font-ui text-[10px] text-parchment-dark uppercase tracking-[0.2em] space-y-2 leading-relaxed">
-					<p>Establishing Justice for the Pre-born in Georgia</p>
-					<p>&copy; {new Date().getFullYear()} Operation Gospel</p>
+					<p>&copy; {new Date().getFullYear()} End Abortion Georgia</p>
 				</div>
 			</div>
 		</div>

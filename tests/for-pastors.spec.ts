@@ -15,7 +15,7 @@ test.describe('For Pastors Page', () => {
 
 		// 2. Verify "Turned Over Hypothesis" section
 		await expect(page.getByRole('heading', { name: 'The Turned Over Hypothesis' })).toBeVisible();
-		await expect(page.getByText('Romans 1 gives us the diagnosis')).toBeVisible();
+		await expect(page.getByText(/Romans 1 gives us the diagnosis/)).toBeVisible();
 
 		// 3. Verify Documentary
 		await expect(
@@ -24,7 +24,7 @@ test.describe('For Pastors Page', () => {
 		// Check iframe existence
 		const iframe = page.locator('iframe[title="The Fatal Flaw Documentary"]');
 		await expect(iframe).toBeVisible();
-		await expect(iframe).toHaveAttribute('src', 'https://www.youtube.com/embed/k33epqzJIlM');
+		await expect(iframe).toHaveAttribute('src', 'https://www.youtube-nocookie.com/embed/k33epqzJIlM');
 
 		// 4. Verify PastorCTA
 		// The PastorCTA component usually has a heading like "Are you a Pastor?" or "Add Your Church"
@@ -32,6 +32,6 @@ test.describe('For Pastors Page', () => {
 		await expect(page.getByText('Are you a Pastor?')).toBeVisible();
 
 		// Screenshot for verification
-		await page.screenshot({ path: 'tests/screenshots/for-pastors.png', fullPage: true });
+		await page.screenshot({ path: 'test-results/for-pastors.png', fullPage: true });
 	});
 });

@@ -1,0 +1,41 @@
+name: Check official Georgia boundaries
+on:
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Fetch official Census release and validate all region assignments
+        run: node scripts/refresh-census.mjs
+      - run: npm run data:validate-regions && npm run check && npx vitest run && npm run build
+      - name: Propose versioned data update (never auto-publish redistricting)
+        uses: peter-evans/create-pull-request@v7
+        with:
+          base: dev
+          branch: automation/georgia-data-refresh
+          draft: true
+          title: 'data: review official Georgia boundary refresh'
+          commit-message: 'data: stage official Georgia boundary refresh'
+          add-paths: |
+            static/data/georgia-house-districts.json
+            static/data/georgia-regions.json
+          body: |
+            Weekly official Census TIGER/Line check. This does not execute the sibling ga-gms-map project.
+            All 180 district IDs and six-region coverage are validated before staging data.
+            Before merging: review boundary effective dates, district-number/region assignments,
+            ACS denominator compatibility, and account-history version migration.
+            Election results alone do not imply changed district boundaries.
+            This workflow never promotes or deploys production.

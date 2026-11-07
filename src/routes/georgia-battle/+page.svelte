@@ -8,11 +8,22 @@
 	let { data } = $props();
 
 	let rawTextVisible = $state(true);
+	let copied = $state(false);
 	let showModal = $state(false);
 	let modalContent = $state({ title: '', content: '' });
 	
 	let activeSection = $state(-1);
 	let billTextContainer = $state<HTMLElement>();
+
+	async function sharePage() {
+		try {
+			await navigator.clipboard.writeText(window.location.href);
+			copied = true;
+			setTimeout(() => (copied = false), 2000);
+		} catch {
+			copied = false;
+		}
+	}
 
 	function openModal(title: string, content: string) {
 		modalContent = { title, content };
@@ -28,7 +39,7 @@
 	// ];
 
 	// Parse bill text into lines for potential future highlighting
-	const billLines = data.billText.split('\n');
+	const billLines = $derived(data.billText.split('\n'));
 
 	function scrollBillToLine(sectionIndex: number) {
 		if (!billTextContainer || sectionIndex < 0) return;
@@ -40,8 +51,9 @@
 		const textContent = pre.textContent || '';
 		const lines = textContent.split('\n');
 
-		// Find the target line content
-		const targetLineIndex = sectionLines[sectionIndex];
+		// Find the target line content. The section ranges are intentionally disabled while
+		// bill-line highlighting is refined, so scrolling remains a no-op until they return.
+		const targetLineIndex = sectionIndex;
 		if (targetLineIndex >= lines.length) return;
 
 		// Calculate position by measuring from start to target line
@@ -134,6 +146,14 @@
 					</div>
 				</div>
 				<div class="flex flex-col gap-6 text-left md:text-right min-w-[240px] border-l md:border-l-0 md:border-r border-charcoal pl-6 md:pl-0 md:pr-6">
+					<button
+						type="button"
+						onclick={sharePage}
+						aria-label={copied ? 'Link copied' : 'Share this page'}
+						class="text-xs font-ui text-gold uppercase tracking-widest font-bold hover:text-gold-light transition-colors"
+					>
+						{copied ? 'Copied' : 'Share this page'}
+					</button>
 					<div class="group">
 						<div class="text-xs font-ui text-gold uppercase tracking-widest font-bold mb-2">
 							Bill Author

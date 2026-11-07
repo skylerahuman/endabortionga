@@ -84,17 +84,16 @@ describe('Navigation Configuration', () => {
 	});
 
 	describe('ExternalLinks', () => {
-		it('should have DonorBox URL', () => {
-			expect(ExternalLinks.DONORBOX).toContain('donorbox.org');
+		it('routes donations through the independent movement checkout', () => {
+			expect(ExternalLinks.DONATE).toBe('/support');
 		});
 
 		it('should have Plural Policy URL', () => {
 			expect(ExternalLinks.PLURAL_POLICY).toContain('pluralpolicy.com');
 		});
 
-		it('should have valid mailto links', () => {
-			expect(ExternalLinks.EMAIL_JOIN).toMatch(/^mailto:/);
-			expect(ExternalLinks.EMAIL_INFO).toMatch(/^mailto:/);
+		it('routes registration to the private movement account flow', () => {
+			expect(ExternalLinks.ACCOUNT).toBe('/join');
 		});
 
 		it('should have YouTube URL', () => {

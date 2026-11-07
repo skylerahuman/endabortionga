@@ -28,5 +28,6 @@ vite.config.ts.timestamp-*
 /playwright-report
 /coverage
 /vitest-report
+/.data
 junit.xml
 .env*.local

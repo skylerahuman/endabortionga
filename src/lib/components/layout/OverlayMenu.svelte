@@ -2,19 +2,15 @@
 	import { page } from '$app/state';
 	import { fade, fly } from 'svelte/transition';
 	import { NavCategories } from '$lib/config/navigation';
-	import { mobileMenuOpen, supportModalOpen, supportModalType } from '$lib/stores';
+	import { supportModalOpen, supportModalType } from '$lib/stores';
 
 	interface Props {
+		open: boolean;
 		onClose: () => void;
 	}
 
-	let { onClose }: Props = $props();
-
-	// Subscribe to store and sync with local state
-	let openValue = $state(false);
-	mobileMenuOpen.subscribe((value) => {
-		openValue = value;
-	});
+	let { open, onClose }: Props = $props();
+	let openValue = $derived(open);
 
 	function isActive(href: string) {
 		return page.url.pathname === href;

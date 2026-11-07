@@ -11,6 +11,6 @@ describe('PastorCTA', () => {
 
 		const link = screen.getByRole('link', { name: /add your church/i });
 		expect(link).toBeInTheDocument();
-		expect(link).toHaveAttribute('href', 'mailto:join@operationgospel.life');
+		expect(link).toHaveAttribute('href', '/join');
 	});
 });

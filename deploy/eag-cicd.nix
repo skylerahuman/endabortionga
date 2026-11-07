@@ -11,10 +11,19 @@
     description = "GitHub-built EAG development preview";
     wantedBy = [ "multi-user.target" ];
     unitConfig.ConditionPathExists = "/var/lib/eag-releases/dev/current/build/index.js";
-    environment = { HOST = "127.0.0.1"; PORT = "3100"; ORIGIN = "https://dev.endabortionga.org"; NODE_ENV = "production"; };
+    environment = {
+      HOST = "127.0.0.1"; PORT = "3100"; ORIGIN = "https://dev.endabortionga.org";
+      NODE_ENV = "production";
+      DATABASE_PATH = "/var/lib/eag-preview/movement.sqlite";
+      PUBLIC_SITE_ENV = "dev";
+      PUBLIC_SHOW_MAP_DEBUG = "false";
+      PUBLIC_SHOW_PREVIEW_LABELS = "false";
+    };
     serviceConfig = {
       User = "eag-preview"; Group = "eag-preview";
       WorkingDirectory = "/var/lib/eag-releases/dev/current";
+      StateDirectory = "eag-preview";
+      StateDirectoryMode = "0700";
       ExecStart = "${pkgs.nodejs_22}/bin/node build/index.js";
       Restart = "on-failure"; RestartSec = 3;
       NoNewPrivileges = true; ProtectSystem = "strict"; ProtectHome = true;

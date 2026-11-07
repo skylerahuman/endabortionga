@@ -12,9 +12,16 @@ npm run dev -- --host 127.0.0.1
 npm run build
 ```
 
-Node 22 is used locally and in CI. No secrets are needed to build. Optionally set
-`DATABASE_URL` in a local `.env` for volunteer registration; without it that API
-returns 503 and does not store submissions. No production database is configured.
+Node 22 is used locally and in CI. No secrets are needed to build. Movement accounts,
+district registrations/history and communication preferences use SQLite at local
+`.data/movement-map.sqlite`; production requires an explicit private persistent
+`DATABASE_PATH`. This is separate from the legacy volunteers API's optional Neon
+`DATABASE_URL`. See `plans/movement-map-operations.md` and `.env.example`.
+
+Before using the new account APIs on the dev host, apply the persistent-state settings
+from `deploy/eag-cicd.nix`: `/var/lib/eag-preview/movement.sqlite`, a private systemd
+StateDirectory, and the display environment flags. Source/artifact pushes do not apply
+host configuration. Never put account storage inside a versioned release directory.
 
 ## Branches
 
@@ -46,13 +53,12 @@ Promote by opening a PR **from dev into prd**.
 ## Build and deployment
 
 GitHub-hosted runners build on dev/prd pushes and PRs. The required `build` job
-checks the production PR source, builds SvelteKit and smoke-tests its HTTP server
-and the unavailable database response. The old unit suite runs non-blocking:
-at bootstrap 6 tests fail (stale navigation expectations and missing browser
-IntersectionObserver mock). `npm run check` also has an existing undefined
-`sectionLines` error in georgia-battle. These are not silently considered passing;
-repair them and make those checks blocking before the full public-site launch.
-Existing third-party dependency audit findings also need a separate review.
+checks the production PR source, typechecks Svelte, runs blocking unit tests and
+contiguous region coverage validation, builds SvelteKit and smoke-tests its HTTP server,
+SQLite aggregate API and unavailable legacy volunteers response. The earlier baseline
+typecheck/navigation failures are fixed. Third-party dependency audit findings still
+need a separate review. Native dependency scripts run on the GitHub runner while
+packaging better-sqlite3; never skip those scripts in the release dependency install.
 
 Push builds upload `site-dev` / `site-prd` artifacts. Production artifacts contain
 only the holding page, never the full application. Changing production to the
